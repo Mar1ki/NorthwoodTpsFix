@@ -17,14 +17,10 @@ namespace NorthwoodTpsFix
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
             List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Pool.Get(instructions);
-            int offset = 0;
+            int offset = -1;
             int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Newarr) + offset;
-            newInstructions.InsertRange(index, new CodeInstruction[]
-            {
-                new CodeInstruction(OpCodes.Pop),
-                new CodeInstruction(OpCodes.Ldc_I4, 480),
-            });
 
+            newInstructions[index].operand = 480;
             for (int z = 0; z < newInstructions.Count; z++)
                 yield return newInstructions[z];
 
