@@ -17,11 +17,12 @@ namespace NorthwoodTpsFix
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
             List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Pool.Get(instructions);
-            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Call && instruction.operand == Method(typeof(UnityEngine.Mathf), nameof(Mathf.Abs), new Type[] { typeof(float) })) + 11;
+            int offset = 0;
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Newarr) + offset;
             newInstructions.InsertRange(index, new CodeInstruction[]
             {
                 new CodeInstruction(OpCodes.Pop),
-                new CodeInstruction(OpCodes.Ldc_I4_S, 480),
+                new CodeInstruction(OpCodes.Ldc_I4, 480),
             });
 
             for (int z = 0; z < newInstructions.Count; z++)
